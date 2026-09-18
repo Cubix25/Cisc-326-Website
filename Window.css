@@ -1,0 +1,72 @@
+.mac-window {
+  position: absolute;
+  width: 320px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+  font-family: 'Chicago', 'Courier New', monospace; /* Fallback to clean sans-serif */
+  user-select: none;
+}
+
+/* Classic Mac title bar with horizontal pinstripes */
+.mac-title-bar {
+  height: 20px;
+  background-color: #ffffff;
+  border-bottom: 2px solid #000000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  cursor: grab;
+  /* Repeating linear gradient creates the classic Mac horizontal pinstripe effect */
+  background-image: repeating-linear-gradient(
+    0deg,
+    #ccc,
+    #ccc 1px,
+    #fff 1px,
+    #fff 2px
+  );
+}
+
+.mac-title-bar:active {
+  cursor: grabbing;
+}
+
+/* Close box (small empty square on the left) */
+.mac-close-box {
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  cursor: pointer;
+}
+
+.mac-close-box:active {
+  background: #000000;
+}
+
+/* Title Text centered in the bar with a white background highlight */
+.mac-title-text {
+  background: #ffffff;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: bold;
+  border: 1px solid #000000;
+  letter-spacing: -0.5px;
+}
+
+/* Zoom/Collapse box on the right */
+.mac-zoom-box {
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border: 1px solid #000000;
+}
+
+.mac-window-content {
+  padding: 12px;
+  font-size: 12px;
+  color: #000000;
+  background: #ffffff;
+  min-height: 100px;
+}

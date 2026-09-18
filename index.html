@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classic Mac OS Portfolio</title>
+  <!-- React and ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Babel to compile JSX in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    /* Reset & Classic Mac Desktop Background (Dithered Pattern) */
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #555555;
+      background-image: 
+        linear-gradient(45deg, #666666 25%, transparent 25%), 
+        linear-gradient(-45deg, #666666 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #666666 75%), 
+        linear-gradient(-45deg, transparent 75%, #666666 75%);
+      background-size: 4px 4px;
+      background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+      font-family: monospace, sans-serif;
+      user-select: none;
+    }
+
+    /* Top Menu Bar with only the clock on the right */
+    .mac-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 20px;
+      background-color: #ffffff;
+      border-bottom: 2px solid #000000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 10px;
+      box-sizing: border-box;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 9999;
+    }
+
+    /* Desktop Icons Grid (Scaled up 150%) */
+    .desktop-grid {
+      position: absolute;
+      top: 40px;
+      left: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .desktop-icon {
+      width: 100px;
+      text-align: center;
+      cursor: pointer;
+      color: #ffffff;
+      text-shadow: 1px 1px #000000;
+      font-size: 14px;
+    }
+
+    .desktop-icon:hover .icon-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px dotted #ffffff;
+    }
+
+    .icon-box {
+      width: 54px;
+      height: 54px;
+      background: #ffffff;
+      border: 1px solid #000000;
+      margin: 0 auto 6px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+    }
+
+    /* Mac Window Container */
+    .mac-window {
+      position: absolute;
+      background: #ffffff;
+      border: 2px solid #000000;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Classic Mac Title Bar with Horizontal Pinstripes */
+    .mac-title-bar {
+      height: 20px;
+      background-color: #ffffff;
+      border-bottom: 2px solid #000000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+      cursor: grab;
+      background-image: repeating-linear-gradient(
+        0deg,
+        #ccc,
+        #ccc 1px,
+        #fff 1px,
+        #fff 2px
+      );
+    }
+
+    .mac-title-bar:active {
+      cursor: grabbing;
+    }
+
+    /* Title Text */
+    .mac-title-text {
+      background: #ffffff;
+      padding: 0 6px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 1px solid #000000;
+      letter-spacing: -0.5px;
+    }
+
+    /* Exit Button in Header */
+    .mac-header-exit {
+      background: #ffffff;
+      border: 1px solid #000000;
+      font-size: 9px;
+      font-family: monospace;
+      font-weight: bold;
+      padding: 0 4px;
+      height: 14px;
+      line-height: 12px;
+      cursor: pointer;
+    }
+
+    .mac-header-exit:active {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* Window Body Content */
+    .mac-window-content {
+      padding: 14px;
+      font-size: 12px;
+      color: #000000;
+      background: #ffffff;
+      line-height: 1.4;
+    }
+
+    .mac-window-content p {
+      margin-top: 0;
+    }
+
+    /* Retro Link Style */
+    .retro-link {
+      color: #0000CC;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    .retro-link:hover {
+      background: #0000CC;
+      color: #ffffff;
+    }
+
+    /* GIF Frame styling */
+    .gif-container {
+      border: 2px solid #000000;
+      background: #000;
+      padding: 2px;
+      box-sizing: border-box;
+      display: inline-block; /* Shrink-wraps to the image size */
+    }
+
+    .gif-container img {
+      display: block;
+      /* Removed width/height 100% so the image uses its native dimensions */
+    }
+  </style>
+</head>
+<body>
+
+  <div id="root"></div>
+
+  <!-- React Logic Script -->
+  <script type="text/babel">
+    // Live Clock Component for Menu Bar
+    function MenuClock() {
+      const [time, setTime] = React.useState(new Date());
+
+      React.useEffect(() => {
+        const timer = setInterval(() => setTime(new Date()), 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      return (
+        <span>
+          {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
+      );
+    }
+
+    // Top Menu Bar Component (Only Time)
+    function MenuBar() {
+      return (
+        <div className="mac-menu-bar">
+          <MenuClock />
+        </div>
+      );
+    }
+
+    // Draggable Window Component
+    function Window({ title, children, onClose, initialX = 160, initialY = 120, width = 340 }) {
+      const [position, setPosition] = React.useState({ x: initialX, y: initialY });
+      const [isDragging, setIsDragging] = React.useState(false);
+      const [dragOffset, setDragOffset] = React.useState({ x: 0, y: 0 });
+      const [zIndex, setZIndex] = React.useState(1);
+
+      const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setDragOffset({
+          x: e.clientX - position.x,
+          y: e.clientY - position.y
+        });
+        setZIndex(Date.now());
+      };
+
+      const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y
+        });
+      };
+
+      const handleMouseUp = () => {
+        setIsDragging(false);
+      };
+
+      return (
+        <div 
+          className="mac-window"
+          style={{ 
+            width: `${width}px`,
+            transform: `translate(${position.x}px, ${position.y}px)`,
+            zIndex: zIndex
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onClick={() => setZIndex(Date.now())}
+        >
+          <div className="mac-title-bar" onMouseDown={handleMouseDown}>
+            <div className="mac-title-text">{title}</div>
+            <button className="mac-header-exit" onClick={(e) => { e.stopPropagation(); onClose(); }}>X</button>
+          </div>
+
+          <div className="mac-window-content">
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    // Main Desktop Layout with Application State
+    function Desktop() {
+      const [windows, setWindows] = React.useState({
+        about: true,
+        team: true,
+        jifGif: true 
+      });
+
+      const toggleWindow = (appName, isOpen) => {
+        setWindows(prev => ({ ...prev, [appName]: isOpen }));
+      };
+
+      return (
+        <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+          <MenuBar />
+
+          {/* Desktop Shortcut Icons */}
+          <div className="desktop-grid">
+
+            {/* About Window */}
+            <div className="desktop-icon" onClick={() => toggleWindow('about', true)}>
+              <div className="icon-box">📄</div>
+              <span>About The Website.txt</span>
+            </div>
+
+            {/* Meet the team Window */}
+            <div className="desktop-icon" onClick={() => toggleWindow('team', true)}>
+              <div className="icon-box">📄</div>
+              <span>Meet the team!!!.txt</span>
+            </div>
+
+            {/* Gif Window */}
+            <div className="desktop-icon" onClick={() => toggleWindow('jifGif', true)}>
+              <div className="icon-box">🎞️</div>
+              <span>jifGif.app</span>
+            </div>
+
+          </div>
+
+          {/*About Window */}
+          {windows.about && (
+            <Window title="About The Website.txt" onClose={() => toggleWindow('about', false)} initialX={180} initialY={600} width={340}>
+              <p><strong>This Website is for Cisc 322/326</strong></p>
+              <p>Over the length of the course, this website will be updated with the steps of the group project</p>
+            </Window>
+          )}
+
+          {/* Meet the team */}
+          {windows.team && (
+            <Window title="Meet the team!!!.txt" onClose={() => toggleWindow('team', false)} initialX={800} initialY={325} width={340}>
+              <p><strong>Meet the group members:</strong></p>
+              <p>Zhuoyuan Cao: Project lead<br/>Hannah Cox: Presenter<br/>Himnish Rawal: Presenter<br/>Gabriel Dimvoski: Web developer<br/>Spencer Mcauslan: Researcher<br/>Patrik Anders Backman: Researcher</p>
+            </Window>
+          )}
+
+          {/* GIF Viewer Window*/}
+          {windows.jifGif && (
+            <Window title="jifGif.app" onClose={() => toggleWindow('jifGif', false)} initialX={150} initialY={100} height={"auto"} width={"auto"}>
+              <div className="gif-container">
+                <img src="Welcome.gif" alt="Animation Banner" />
+              </div>
+            </Window>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<Desktop />, document.getElementById('root'));
+  </script>
+
+</body>
+</html>
