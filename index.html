@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Cisc 322/326 Project</title>
   <!-- React and ReactDOM from CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -183,6 +184,40 @@
       display: block;
       /* Removed width/height 100% so the image uses its native dimensions */
     }
+
+    /* Icons inside a folder window */
+    .folder-grid {
+      display: flex;
+      gap: 20px;
+      padding: 10px;
+      flex-wrap: wrap;
+    }
+
+    .folder-icon {
+      width: 80px;
+      text-align: center;
+      cursor: pointer;
+      color: #000000; /* Black text for white window background */
+      font-size: 12px;
+    }
+
+    .folder-icon .icon-box {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      border: 1px solid #000000;
+      margin: 0 auto 6px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+    }
+
+    .folder-icon:hover .icon-box {
+      background: #eeeeee;
+      border: 1px dotted #000000;
+    }
   </style>
 </head>
 <body>
@@ -269,72 +304,152 @@
     }
 
     // Main Desktop Layout with Application State
-    function Desktop() {
-      const [windows, setWindows] = React.useState({
-        about: true,
-        team: true,
-        jifGif: true 
-      });
+function Desktop() {
+  const [windows, setWindows] = React.useState({
+    about: true,
+    team: true,
+    jifGif: true,
+    assignment1: false, // The Folder
+    pptxApp: false,     // PPTX Viewer
+    pdfApp: false,      // PDF Viewer
+    ytApp: false        // YouTube Viewer
+  });
 
-      const toggleWindow = (appName, isOpen) => {
-        setWindows(prev => ({ ...prev, [appName]: isOpen }));
-      };
+  const toggleWindow = (appName, isOpen) => {
+    setWindows(prev => ({ ...prev, [appName]: isOpen }));
+  };
 
-      return (
-        <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-          <MenuBar />
+  return (
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <MenuBar />
 
-          {/* Desktop Shortcut Icons */}
-          <div className="desktop-grid">
-
-            {/* About Window */}
-            <div className="desktop-icon" onClick={() => toggleWindow('about', true)}>
-              <div className="icon-box">📄</div>
-              <span>About The Website.txt</span>
-            </div>
-
-            {/* Meet the team Window */}
-            <div className="desktop-icon" onClick={() => toggleWindow('team', true)}>
-              <div className="icon-box">📄</div>
-              <span>Meet the team!!!.txt</span>
-            </div>
-
-            {/* Gif Window */}
-            <div className="desktop-icon" onClick={() => toggleWindow('jifGif', true)}>
-              <div className="icon-box">🎞️</div>
-              <span>jifGif.app</span>
-            </div>
-
-          </div>
-
-          {/*About Window */}
-          {windows.about && (
-            <Window title="About The Website.txt" onClose={() => toggleWindow('about', false)} initialX={180} initialY={600} width={340}>
-              <p><strong>This Website is for Cisc 322/326</strong></p>
-              <p>Over the length of the course, this website will be updated with the steps of the group project</p>
-            </Window>
-          )}
-
-          {/* Meet the team */}
-          {windows.team && (
-            <Window title="Meet the team!!!.txt" onClose={() => toggleWindow('team', false)} initialX={800} initialY={325} width={340}>
-              <p><strong>Team Name: Fritz the Coders</strong></p>
-              <p><strong>Meet the group members</strong></p>
-              <p>Zhuoyuan Cao: Project lead<br/>Hannah Cox: Presenter<br/>Himnish Rawal: Presenter<br/>Gabriel Dimvoski: Web developer<br/>Spencer Mcauslan: Researcher<br/>Patrik Anders Backman: Researcher</p>
-            </Window>
-          )}
-
-          {/* GIF Viewer Window*/}
-          {windows.jifGif && (
-            <Window title="jifGif.app" onClose={() => toggleWindow('jifGif', false)} initialX={150} initialY={100} height={"auto"} width={"auto"}>
-              <div className="gif-container">
-                <img src="Welcome.gif" alt="Animation Banner" />
-              </div>
-            </Window>
-          )}
+      {/* Desktop Shortcut Icons */}
+      <div className="desktop-grid">
+        <div className="desktop-icon" onClick={() => toggleWindow('about', true)}>
+          <div className="icon-box">📄</div>
+          <span>About The Website.txt</span>
         </div>
-      );
-    }
+        <div className="desktop-icon" onClick={() => toggleWindow('team', true)}>
+          <div className="icon-box">📄</div>
+          <span>Meet the team!!!.txt</span>
+        </div>
+        <div className="desktop-icon" onClick={() => toggleWindow('jifGif', true)}>
+          <div className="icon-box">🎞️</div>
+          <span>jifGif.app</span>
+        </div>
+        
+        {/* NEW: Assignment 1 Folder Icon */}
+        <div className="desktop-icon" onClick={() => toggleWindow('assignment1', true)}>
+          <div className="icon-box">📁</div>
+          <span>Assignment 1</span>
+        </div>
+      </div>
+
+      {/* Existing Windows */}
+      {windows.about && (
+        <Window title="About The Website.txt" onClose={() => toggleWindow('about', false)} initialX={180} initialY={600} width={340}>
+          <p><strong>This Website is for Cisc 322/326</strong></p>
+          <p>Over the length of the course, this website will be updated with the steps of the group project<br/>
+          <br/>
+          <strong>Changelog:</strong><br/>
+          2026/10/08 - Added Assignment 1
+          </p>
+        </Window>
+      )}
+      {windows.team && (
+        <Window title="Meet the team!!!.txt" onClose={() => toggleWindow('team', false)} initialX={800} initialY={325} width={340}>
+          <p><strong>Team Name: Fritz the Coders</strong></p>
+          <p><strong>Meet the group members</strong></p>
+          <p>Zhuoyuan Cao: Project lead<br/>Hannah Cox: Presenter<br/>Himnish Rawal: Presenter<br/>Gabriel Dimvoski: Web developer<br/>Spencer Mcauslan: Researcher<br/>Patrik Anders Backman: Researcher</p>
+        </Window>
+      )}
+      {windows.jifGif && (
+        <Window title="jifGif.app" onClose={() => toggleWindow('jifGif', false)} initialX={150} initialY={100} height={"auto"} width={"auto"}>
+          <div className="gif-container">
+            <img src="Welcome.gif" alt="Animation Banner" />
+          </div>
+        </Window>
+      )}
+
+      {/* =========================================
+          NEW: ASSIGNMENT 1 FOLDER & APPLICATIONS
+          ========================================= */}
+
+      {/* 1. The Assignment Folder Window */}
+      {windows.assignment1 && (
+        <Window title="Assignment 1" onClose={() => toggleWindow('assignment1', false)} initialX={300} initialY={200} width={380}>
+          <div className="folder-grid">
+            <div className="folder-icon" onDoubleClick={() => toggleWindow('pptxApp', true)}>
+              <div className="icon-box">📊</div>
+              <span>CISC 322 A1 Slides.pdf</span>
+            </div>
+            <div className="folder-icon" onDoubleClick={() => toggleWindow('pdfApp', true)}>
+              <div className="icon-box">📕</div>
+              <span>CISC 322 A1 Report.pdf</span>
+            </div>
+            <div className="folder-icon" onDoubleClick={() => toggleWindow('ytApp', true)}>
+              <div className="icon-box">🎬</div>
+              <span>A1Vid.mp4</span>
+            </div>
+          </div>
+        </Window>
+      )}
+
+      {/* 2. PDF Slides App (Original iFrame Implementation - Doubled Size) */}
+      {windows.pptxApp && (
+        <Window title="CISC 322 A1 Slides.pdf" onClose={() => toggleWindow('pptxApp', false)} initialX={100} initialY={50} width={1000}>
+          <div style={{ marginBottom: '15px' }}>
+            <a href="Group_13_WezTerm.pdf" download className="retro-link">⬇️ Download Slideshow (.pdf)</a>
+          </div>
+          
+          <iframe 
+            src="Group_13_WezTerm.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" 
+            width="100%" 
+            height="750px" 
+            frameBorder="0"
+            style={{ border: '2px solid #000' }}>
+          </iframe>
+        </Window>
+      )}
+
+      {/* 3. PDF App */}
+      {windows.pdfApp && (
+        <Window title="CISC 322 A1 Report.pdf" onClose={() => toggleWindow('pdfApp', false)} initialX={400} initialY={200} width={600}>
+          <div style={{ marginBottom: '15px' }}>
+            <a href="CISC 322 A1 Report.pdf" download className="retro-link">⬇️ Download Report (.pdf)</a>
+          </div>
+          <iframe 
+            src="CISC 322 A1 Report.pdf" 
+            width="100%" 
+            height="450px" 
+            style={{ border: '2px solid #000' }}>
+          </iframe>
+        </Window>
+      )}
+
+      {/* 4. YouTube App */}
+      {windows.ytApp && (
+        <Window title="A1Vid.mp4" onClose={() => toggleWindow('ytApp', false)} initialX={350} initialY={150} width={836}>
+          <div style={{ border: '2px solid #000', background: '#000', padding: '2px' }}>
+            <iframe 
+              width="800" 
+              height="450" 
+              /* 1. Changed domain to youtube-nocookie.com to bypass tracker-blockers */
+              src="https://www.youtube-nocookie.com/embed/NVGD9twGCHc?autoplay=1" 
+              title="YouTube video player" 
+              frameBorder="0" 
+              /* 2. Added referrerPolicy to override Cloudflare's strict page rules */
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
+          </div>
+        </Window>
+      )}
+
+    </div>
+  );
+}
 
     ReactDOM.render(<Desktop />, document.getElementById('root'));
   </script>
