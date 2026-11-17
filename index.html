@@ -309,10 +309,16 @@ function Desktop() {
     about: true,
     team: true,
     jifGif: true,
-    assignment1: false, // The Folder
-    pptxApp: false,     // PPTX Viewer
-    pdfApp: false,      // PDF Viewer
-    ytApp: false        // YouTube Viewer
+    // Assignment 1 Windows
+    assignment1: false, 
+    pptxApp: false,     
+    pdfApp: false,      
+    ytApp: false,
+    // Assignment 2 Windows
+    assignment2: false, 
+    a2SlidesApp: false,     
+    a2PdfApp: false,      
+    a2YtApp: false 
   });
 
   const toggleWindow = (appName, isOpen) => {
@@ -338,10 +344,16 @@ function Desktop() {
           <span>jifGif.app</span>
         </div>
         
-        {/* NEW: Assignment 1 Folder Icon */}
+        {/* Assignment 1 Folder Icon */}
         <div className="desktop-icon" onClick={() => toggleWindow('assignment1', true)}>
           <div className="icon-box">📁</div>
           <span>Assignment 1</span>
+        </div>
+
+        {/* NEW: Assignment 2 Folder Icon */}
+        <div className="desktop-icon" onClick={() => toggleWindow('assignment2', true)}>
+          <div className="icon-box">📁</div>
+          <span>Assignment 2</span>
         </div>
       </div>
 
@@ -352,7 +364,8 @@ function Desktop() {
           <p>Over the length of the course, this website will be updated with the steps of the group project<br/>
           <br/>
           <strong>Changelog:</strong><br/>
-          2026/10/08 - Added Assignment 1
+          2026/10/08 - Added Assignment 1<br/>
+          2026/11/17 - Added Assignment 2
           </p>
         </Window>
       )}
@@ -372,22 +385,20 @@ function Desktop() {
       )}
 
       {/* =========================================
-          NEW: ASSIGNMENT 1 FOLDER & APPLICATIONS
+          ASSIGNMENT 1 FOLDER & APPLICATIONS
           ========================================= */}
-
-      {/* 1. The Assignment Folder Window */}
       {windows.assignment1 && (
         <Window title="Assignment 1" onClose={() => toggleWindow('assignment1', false)} initialX={300} initialY={200} width={380}>
           <div className="folder-grid">
-            <div className="folder-icon" onDoubleClick={() => toggleWindow('pptxApp', true)}>
+            <div className="folder-icon" onClick={() => toggleWindow('pptxApp', true)}>
               <div className="icon-box">📊</div>
               <span>CISC 322 A1 Slides.pdf</span>
             </div>
-            <div className="folder-icon" onDoubleClick={() => toggleWindow('pdfApp', true)}>
+            <div className="folder-icon" onClick={() => toggleWindow('pdfApp', true)}>
               <div className="icon-box">📕</div>
               <span>CISC 322 A1 Report.pdf</span>
             </div>
-            <div className="folder-icon" onDoubleClick={() => toggleWindow('ytApp', true)}>
+            <div className="folder-icon" onClick={() => toggleWindow('ytApp', true)}>
               <div className="icon-box">🎬</div>
               <span>A1Vid.mp4</span>
             </div>
@@ -395,13 +406,12 @@ function Desktop() {
         </Window>
       )}
 
-      {/* 2. PDF Slides App (Original iFrame Implementation - Doubled Size) */}
+      {/* A1 Slides App */}
       {windows.pptxApp && (
         <Window title="CISC 322 A1 Slides.pdf" onClose={() => toggleWindow('pptxApp', false)} initialX={100} initialY={50} width={1000}>
           <div style={{ marginBottom: '15px' }}>
             <a href="Group_13_WezTerm.pdf" download className="retro-link">⬇️ Download Slideshow (.pdf)</a>
           </div>
-          
           <iframe 
             src="Group_13_WezTerm.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" 
             width="100%" 
@@ -412,7 +422,7 @@ function Desktop() {
         </Window>
       )}
 
-      {/* 3. PDF App */}
+      {/* A1 Report App */}
       {windows.pdfApp && (
         <Window title="CISC 322 A1 Report.pdf" onClose={() => toggleWindow('pdfApp', false)} initialX={400} initialY={200} width={600}>
           <div style={{ marginBottom: '15px' }}>
@@ -427,18 +437,91 @@ function Desktop() {
         </Window>
       )}
 
-      {/* 4. YouTube App */}
+      {/* A1 YouTube App */}
       {windows.ytApp && (
         <Window title="A1Vid.mp4" onClose={() => toggleWindow('ytApp', false)} initialX={350} initialY={150} width={836}>
           <div style={{ border: '2px solid #000', background: '#000', padding: '2px' }}>
             <iframe 
               width="800" 
               height="450" 
-              /* 1. Changed domain to youtube-nocookie.com to bypass tracker-blockers */
               src="https://www.youtube-nocookie.com/embed/4Dg8ZO8Bw4k?autoplay=1" 
               title="YouTube video player" 
               frameBorder="0" 
-              /* 2. Added referrerPolicy to override Cloudflare's strict page rules */
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
+          </div>
+        </Window>
+      )}
+
+      {/* =========================================
+          NEW: ASSIGNMENT 2 FOLDER & APPLICATIONS
+          ========================================= */}
+      {/* A2 Folder Window */}
+      {windows.assignment2 && (
+        <Window title="Assignment 2" onClose={() => toggleWindow('assignment2', false)} initialX={320} initialY={220} width={380}>
+          <div className="folder-grid">
+            <div className="folder-icon" onClick={() => toggleWindow('a2SlidesApp', true)}>
+              <div className="icon-box">📊</div>
+              <span>CISC 322 A2 Slides.pdf</span>
+            </div>
+            <div className="folder-icon" onClick={() => toggleWindow('a2PdfApp', true)}>
+              <div className="icon-box">📕</div>
+              <span>CISC 322 A2 Report.pdf</span>
+            </div>
+            <div className="folder-icon" onClick={() => toggleWindow('a2YtApp', true)}>
+              <div className="icon-box">🎬</div>
+              <span>A2Vid.mp4</span>
+            </div>
+          </div>
+        </Window>
+      )}
+
+      {/* A2 Slides App */}
+      {windows.a2SlidesApp && (
+        <Window title="CISC 322 A2 Slides.pdf" onClose={() => toggleWindow('a2SlidesApp', false)} initialX={120} initialY={70} width={1000}>
+          <div style={{ marginBottom: '15px' }}>
+            {/* Update the href to your A2 Slides PDF file */}
+            <a href="Group_13_A2.pdf" download className="retro-link">⬇️ Download Slideshow (.pdf)</a>
+          </div>
+          <iframe 
+            src="Group_13_A2.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" 
+            width="100%" 
+            height="750px" 
+            frameBorder="0"
+            style={{ border: '2px solid #000' }}>
+          </iframe>
+        </Window>
+      )}
+
+      {/* A2 Report App */}
+      {windows.a2PdfApp && (
+        <Window title="CISC 322 A2 Report.pdf" onClose={() => toggleWindow('a2PdfApp', false)} initialX={420} initialY={220} width={600}>
+          <div style={{ marginBottom: '15px' }}>
+            {/* Update the href to your A2 Report PDF file */}
+            <a href="CISC 322 A2 Report.pdf" download className="retro-link">⬇️ Download Report (.pdf)</a>
+          </div>
+          <iframe 
+            src="CISC 322 A2 Report.pdf" 
+            width="100%" 
+            height="450px" 
+            style={{ border: '2px solid #000' }}>
+          </iframe>
+        </Window>
+      )}
+
+      {/* A2 YouTube App */}
+      {windows.a2YtApp && (
+        <Window title="A2Vid.mp4" onClose={() => toggleWindow('a2YtApp', false)} initialX={370} initialY={170} width={836}>
+          <div style={{ border: '2px solid #000', background: '#000', padding: '2px' }}>
+            <iframe 
+              width="800" 
+              height="450" 
+              /* Remember to update YOUR_A2_VIDEO_ID to your actual Assignment 2 YouTube video ID */
+              src="https://www.youtube-nocookie.com/embed/cmtpGjrdA-I?autoplay=1" 
+              title="YouTube video player" 
+              frameBorder="0" 
               referrerPolicy="strict-origin-when-cross-origin"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen>
